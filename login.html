@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página de login do Programa de Relacionamento do Grupo Atos">
+    <title>Login - Programa de Relacionamento | Grupo Atos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0A2A5F;
+            --primary-dark: #081f45;
+            --primary-light: #1a4080;
+            --secondary: #E52E30;
+            --secondary-dark: #c92224;
+            --background: #F4F6F9;
+            --text-color: #333;
+            --text-muted: #6c757d;
+            --white: #fff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --danger: #dc3545;
+            --success: #28a745;
+            --transition: all 0.3s ease;
+            --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--white);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 420px;
+            transition: var(--transition);
+        }
+
+        .container:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo img {
+            width: 130px;
+            height: auto;
+            transition: var(--transition);
+        }
+
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.75rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-300);
+            background-color: var(--gray-100);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(10, 42, 95, 0.2);
+        }
+
+        .form-control::placeholder {
+            color: var(--gray-500);
+        }
+
+        .form-icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 2.35rem;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 0.8rem;
+            top: 2.35rem;
+            color: var(--gray-500);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230A2A5F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.8rem center;
+            padding-right: 2.5rem;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-check-input {
+            margin-right: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            cursor: pointer;
+        }
+
+        .form-check-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--white);
+            background-color: var(--primary);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 42, 95, 0.3);
+        }
+
+        .btn .spinner {
+            display: none;
+            margin-right: 0.5rem;
+        }
+
+        .btn.loading .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .divider::before {
+            margin-right: 0.5rem;
+        }
+
+        .divider::after {
+            margin-left: 0.5rem;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .links a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Validation styles */
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .form-control.error {
+            border-color: var(--danger);
+        }
+
+        .form-control.success {
+            border-color: var(--success);
+        }
+
+        /* Animation effects */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .form-control {
+                padding: 0.7rem 1rem 0.7rem 2.3rem;
+            }
+            
+            .form-icon, .password-toggle {
+                top: 2.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="sua-logo.png" alt="Logo Grupo Atos">
+        </div>
+        <h2>Acesso ao Sistema</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Usuário</label>
+                <i class="fas fa-user form-icon"></i>
+                <input type="text" id="username" class="form-control" placeholder="Digite seu usuário" required>
+                <div class="error-message" id="username-error">Por favor, informe seu usuário</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <i class="fas fa-lock form-icon"></i>
+                <input type="password" id="password" class="form-control" placeholder="Digite sua senha" required>
+                <i class="fas fa-eye password-toggle" id="password-toggle"></i>
+                <div class="error-message" id="password-error">Por favor, informe sua senha</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="userType">Tipo de Usuário</label>
+                <i class="fas fa-users form-icon"></i>
+                <select id="userType" class="form-control" required>
+                    <option value="" disabled selected>Selecione o tipo de acesso</option>
+                    <option value="admin">Administrador</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="internal">Vendedor Interno</option>
+                    <option value="partner">Parceiro Externo</option>
+                </select>
+                <div class="error-message" id="userType-error">Por favor, selecione o tipo de usuário</div>
+            </div>
+            
+            <div class="form-check">
+                <input type="checkbox" id="remember" class="form-check-input">
+                <label for="remember" class="form-check-label">Lembrar meus dados</label>
+            </div>
+            
+            <button type="submit" id="loginButton" class="btn">
+                <i class="fas fa-spinner spinner"></i>
+                Entrar
+            </button>
+            
+            <div class="divider">ou</div>
+            
+            <div class="links">
+                <a href="#" id="forgotPassword">Esqueceu sua senha?</a>
+                <a href="#" id="createAccount">Criar nova conta</a>
+                <a href="#" id="helpSupport">Suporte técnico</a>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 Grupo Atos - Todos os direitos reservados
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            const passwordToggle = document.getElementById('password-toggle');
+            const passwordField = document.getElementById('password');
+            
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            // Form validation
+            const loginForm = document.getElementById('loginForm');
+            const loginButton = document.getElementById('loginButton');
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simple validation
+                let isValid = true;
+                
+                const username = document.getElementById('username');
+                const password = document.getElementById('password');
+                const userType = document.getElementById('userType');
+                
+                // Username validation
+                if (!username.value.trim()) {
+                    showError(username, 'username-error', 'Por favor, informe seu usuário');
+                    isValid = false;
+                } else {
+                    hideError(username, 'username-error');
+                }
+                
+                // Password validation
+                if (!password.value.trim()) {
+                    showError(password, 'password-error', 'Por favor, informe sua senha');
+                    isValid = false;
+                } else if (password.value.length < 3) { // Reduzido para facilitar testes
+                    showError(password, 'password-error', 'A senha deve ter pelo menos 3 caracteres');
+                    isValid = false;
+                } else {
+                    hideError(password, 'password-error');
+                }
+                
+                // User type validation
+                if (!userType.value) {
+                    showError(userType, 'userType-error', 'Por favor, selecione o tipo de usuário');
+                    isValid = false;
+                } else {
+                    hideError(userType, 'userType-error');
+                }
+                
+                if (isValid) {
+                    // Show loading state
+                    loginButton.classList.add('loading');
+                    loginButton.disabled = true;
+                    
+                    // Simulate API request
+                    setTimeout(function() {
+                        loginButton.classList.remove('loading');
+                        loginButton.disabled = false;
+                        
+                        // Verificar o tipo de usuário selecionado
+                        const userType = document.getElementById('userType').value;
+                        
+                        if (userType === 'internal') {
+                            // Redirecionamento para o painel de Vendedor Interno
+                            window.location.href = 'index.html';
+                        } else {
+                            // Redirecionamento genérico para outros tipos de usuário
+                            alert('Login realizado com sucesso! Em breve teremos painéis específicos para este perfil de usuário.');
+                        }
+                    }, 1000);
+                }
+            });
+            
+            // Helper functions for validation
+            function showError(input, errorId, message) {
+                const errorElement = document.getElementById(errorId);
+                input.classList.add('error');
+                input.classList.remove('success');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            function hideError(input, errorId) {
+                const errorElement = document.getElementById(errorId);
+                input.classList.remove('error');
+                input.classList.add('success');
+                errorElement.style.display = 'none';
+            }
+            
+            // Add functionality to forgot password link
+            document.getElementById('forgotPassword').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Função de recuperação de senha será implementada em breve!');
+            });
+            
+            // Add functionality to create account link
+            document.getElementById('createAccount').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Função de criação de conta será implementada em breve!');
+            });
+            
+            // Add functionality to help/support link
+            document.getElementById('helpSupport').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Entre em contato com o suporte pelo email: suporte@grupoatos.com.br');
+            });
+            
+            // Para demonstração apenas
+            const rememberCheckbox = document.getElementById('remember');
+            rememberCheckbox.addEventListener('change', function() {
+                console.log('Lembrar dados:', this.checked);
+            });
+            
+            // Preenchimento automático para demonstração
+            const demoButton = document.createElement('button');
+            demoButton.type = 'button';
+            demoButton.className = 'btn';
+            demoButton.style.marginTop = '10px';
+            demoButton.style.backgroundColor = '#6c757d';
+            demoButton.innerHTML = '<i class="fas fa-rocket"></i> Autenticar Demo';
+            demoButton.addEventListener('click', function() {
+                document.getElementById('username').value = 'vendedor';
+                document.getElementById('password').value = '123456';
+                document.getElementById('userType').value = 'internal';
+                document.getElementById('remember').checked = true;
+                
+                // Acione o login automaticamente após pequeno delay
+                setTimeout(function() {
+                    loginButton.click();
+                }, 500);
+            });
+            
+            // Adicionar botão após o divider
+            const divider = document.querySelector('.divider');
+            divider.parentNode.insertBefore(demoButton, divider.nextSibling);
+        });
+    </script>
+</body>
+</html>
