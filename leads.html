@@ -477,8 +477,9 @@
         }
 
         .leads-table tbody tr {
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.3s ease-in-out;
             border-bottom: 1px solid #eee;
+            position: relative;
         }
 
         .leads-table tbody tr:last-child {
@@ -615,6 +616,13 @@
             position: relative;
             max-height: 90vh;
             overflow-y: auto;
+        }
+        
+        @keyframes modalBounce {
+            0% { transform: scale(0.8); opacity: 0; }
+            40% { transform: scale(1.05); }
+            70% { transform: scale(0.95); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .modal-header {
