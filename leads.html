@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leads - Programa de Relacionamento</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #2980b9;
@@ -823,89 +824,6 @@
         <div class="sidebar-logo">
             <img src="sua-logo.png" alt="Logo Grupo Atos">
         </div>
-
-    <!-- Modal para adicionar/editar lead -->
-    <div class="modal" id="lead-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Adicionar Novo Lead</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <form id="lead-form">
-                <div class="form-row">
-                    <label for="lead-name">Nome Completo</label>
-                    <input type="text" id="lead-name" required>
-                </div>
-                <div class="form-row">
-                    <label for="lead-phone">Telefone</label>
-                    <input type="tel" id="lead-phone" required>
-                </div>
-                <div class="form-row">
-                    <label for="lead-email">E-mail</label>
-                    <input type="email" id="lead-email">
-                </div>
-                <div class="form-row">
-                    <label for="lead-plan">Tipo de Plano</label>
-                    <select id="lead-plan" required>
-                        <option value="" disabled selected>Selecione um tipo de plano</option>
-                        <option value="saude-individual">Saúde (Individual)</option>
-                        <option value="saude-familiar">Saúde (Familiar)</option>
-                        <option value="saude-pme">Saúde (PME)</option>
-                        <option value="odonto-individual">Odonto (Individual)</option>
-                        <option value="odonto-familiar">Odonto (Familiar)</option>
-                        <option value="odonto-pme">Odonto (PME)</option>
-                        <option value="combo">Combo (Saúde + Odonto)</option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <label for="lead-origin">Origem</label>
-                    <select id="lead-origin" required>
-                        <option value="" disabled selected>Selecione a origem</option>
-                        <option value="site">Site</option>
-                        <option value="facebook">Facebook Ads</option>
-                        <option value="google">Google Ads</option>
-                        <option value="instagram">Instagram</option>
-                        <option value="whatsapp">WhatsApp</option>
-                        <option value="indicacao">Indicação</option>
-                        <option value="outro">Outro</option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <label for="lead-value">Valor Estimado</label>
-                    <input type="text" id="lead-value" placeholder="R$ 0,00">
-                </div>
-                <div class="form-row">
-                    <label for="lead-status">Status</label>
-                    <select id="lead-status" required>
-                        <option value="new" selected>Novo</option>
-                        <option value="contacted">Contatado</option>
-                        <option value="qualified">Qualificado</option>
-                        <option value="proposal">Proposta</option>
-                        <option value="negotiation">Negociação</option>
-                        <option value="won">Fechado</option>
-                        <option value="lost">Perdido</option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <label for="lead-date">Data de Recebimento</label>
-                    <input type="date" id="lead-date" value="2025-04-04">
-                </div>
-                <div class="form-row">
-                    <label for="lead-notes">Observações</label>
-                    <textarea id="lead-notes" placeholder="Adicione informações relevantes sobre o lead..."></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="modal-btn btn-cancel" id="cancel-lead">Cancelar</button>
-                    <button type="submit" class="modal-btn btn-save">Salvar Lead</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Loading overlay -->
-    <div id="loading-overlay" style="display: none;">
-        <div class="spinner"></div>
-    </div>
         
         <div class="sidebar-title">Programa de Relacionamento</div>
         
@@ -942,131 +860,6 @@
                 <strong>Bem-vindo ao Gerenciamento de Leads!</strong>
                 Você tem <span class="badge">7 leads</span> para atender hoje
             </div>
-
-            <!-- Lista de Leads Card -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-list"></i>
-                    <h2>Lista de Leads</h2>
-                </div>
-                
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
-                    <button class="btn" id="add-lead-btn" style="background-color: var(--primary);">
-                        <i class="fas fa-plus"></i>
-                        Novo Lead
-                    </button>
-                </div>
-                
-                <div class="leads-table-container">
-                    <table class="leads-table">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Contato</th>
-                                <th>Plano</th>
-                                <th>Origem</th>
-                                <th>Valor</th>
-                                <th>Status</th>
-                                <th>Data</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Roberto Silva</td>
-                                <td>(98) 98765-4321</td>
-                                <td>Saúde (Familiar)</td>
-                                <td>Facebook Ads</td>
-                                <td>Aprox. R$ 1.200,00</td>
-                                <td><span class="lead-status status-new">Novo</span></td>
-                                <td>02/04/2025</td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
-                                        <button class="contact" title="Contatar"><i class="fas fa-phone-alt"></i></button>
-                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Carlos Mendes</td>
-                                <td>(98) 98112-4567</td>
-                                <td>Combo (Saúde + Odonto)</td>
-                                <td>WhatsApp</td>
-                                <td>Aprox. R$ 780,00</td>
-                                <td><span class="lead-status status-qualified">Qualificado</span></td>
-                                <td>01/04/2025</td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
-                                        <button class="contact" title="Contatar"><i class="fas fa-phone-alt"></i></button>
-                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Patrícia Oliveira</td>
-                                <td>(98) 99876-5432</td>
-                                <td>Saúde (Familiar)</td>
-                                <td>Instagram</td>
-                                <td>R$ 1.450,00</td>
-                                <td><span class="lead-status status-won">Fechado</span></td>
-                                <td>30/03/2025</td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
-                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
-                                        <button class="view" title="Ver contrato"><i class="fas fa-file-contract"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Maria Santos</td>
-                                <td>(98) 98888-7777</td>
-                                <td>Odonto (Individual)</td>
-                                <td>Google Ads</td>
-                                <td>Aprox. R$ 80,00</td>
-                                <td><span class="lead-status status-contacted">Contatado</span></td>
-                                <td>Hoje</td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
-                                        <button class="contact" title="Contatar"><i class="fas fa-phone-alt"></i></button>
-                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>João Pereira</td>
-                                <td>(98) 99999-1111</td>
-                                <td>Saúde (PME)</td>
-                                <td>Indicação</td>
-                                <td>Aprox. R$ 5.800,00</td>
-                                <td><span class="lead-status status-negotiation">Negociação</span></td>
-                                <td>03/04/2025</td>
-                                <td>
-                                    <div class="table-actions">
-                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
-                                        <button class="contact" title="Contatar"><i class="fas fa-phone-alt"></i></button>
-                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Pagination -->
-                <div class="pagination">
-                    <button><i class="fas fa-chevron-left"></i></button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </div>
-    </div>
         </div>
 
         <!-- Stats Cards -->
@@ -1076,6 +869,15 @@
                 <div class="stat-value">38</div>
                 <div class="stat-comparison positive">
                     <i class="fas fa-arrow-up"></i> 12% acima do mês anterior
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button><i class="fas fa-chevron-left"></i></button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
             
@@ -1196,4 +998,118 @@
                             <div class="calendar-stat-label">Taxa de Conversão</div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Lista de Leads Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-list"></i>
+                    <h2>Lista de Leads</h2>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+                    <button class="btn" id="add-lead-btn" style="background-color: var(--primary);">
+                        <i class="fas fa-plus"></i>
+                        Novo Lead
+                    </button>
+                </div>
+                
+                <div class="leads-table-container">
+                    <table class="leads-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Contato</th>
+                                <th>Plano</th>
+                                <th>Origem</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Roberto Silva</td>
+                                <td>(98) 98765-4321</td>
+                                <td>Saúde (Familiar)</td>
+                                <td>Facebook Ads</td>
+                                <td>Aprox. R$ 1.200,00</td>
+                                <td><span class="lead-status status-new">Novo</span></td>
+                                <td>02/04/2025</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
+                                        <button class="contact" title="Contatar"><i class="fas fa-phone-alt"></i></button>
+                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Carlos Mendes</td>
+                                <td>(98) 98112-4567</td>
+                                <td>Combo (Saúde + Odonto)</td>
+                                <td>WhatsApp</td>
+                                <td>Aprox. R$ 780,00</td>
+                                <td><span class="lead-status status-qualified">Qualificado</span></td>
+                                <td>01/04/2025</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
+                                        <button class="contact" title="Contatar"><i class="fas fa-phone-alt"></i></button>
+                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Patrícia Oliveira</td>
+                                <td>(98) 99876-5432</td>
+                                <td>Saúde (Familiar)</td>
+                                <td>Instagram</td>
+                                <td>R$ 1.450,00</td>
+                                <td><span class="lead-status status-won">Fechado</span></td>
+                                <td>30/03/2025</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
+                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                        <button class="view" title="Ver contrato"><i class="fas fa-file-contract"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Maria Santos</td>
+                                <td>(98) 98888-7777</td>
+                                <td>Odonto (Individual)</td>
+                                <td>Google Ads</td>
+                                <td>Aprox. R$ 80,00</td>
+                                <td><span class="lead-status status-contacted">Contatado</span></td>
+                                <td>Hoje</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
+                                        <button class="contact" title="Contatar"><i class="fas fa-phone-alt"></i></button>
+                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>João Pereira</td>
+                                <td>(98) 99999-1111</td>
+                                <td>Saúde (PME)</td>
+                                <td>Indicação</td>
+                                <td>Aprox. R$ 5.800,00</td>
+                                <td><span class="lead-status status-negotiation">Negociação</span></td>
+                                <td>03/04/2025</td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="edit" title="Editar"><i class="fas fa-edit"></i></button>
+                                        <button class="contact" title="Contatar"><i class="fas fa-phone-alt"></i></button>
+                                        <button class="view" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
