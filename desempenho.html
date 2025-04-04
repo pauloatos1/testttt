@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desempenho - Programa de Relacionamento</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2980b9;
+            --primary-dark: #1c638d;
+            --primary-light: #3498db;
+            --secondary: #0A2A5F;
+            --highlight: #16a085;
+            --alert: #e74c3c;
+            --background: #ecf0f1;
+            --card: #ffffff;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --success: #27ae60;
+            --text-white: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--background);
+            box-shadow: 2px 0 5px var(--shadow);
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-logo img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .sidebar-title {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .user-info {
+            padding: 0 20px 20px;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .sidebar-menu a.active {
+            background-color: var(--primary);
+            color: var(--text-white);
+            border-left: 4px solid var(--primary-dark);
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main content */
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .breadcrumbs a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumbs .separator {
+            margin: 0 10px;
+            color: var(--text-light);
+        }
+
+        .breadcrumbs .current {
+            font-weight: 500;
+        }
+
+        /* Title header */
+        .page-header {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .page-header h1 {
+            font-size: 24px;
+            color: var(--primary-dark);
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background-color: var(--card);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-group label {
+            margin-right: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-group button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .filter-group button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Chart grid */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background-color: var(--card);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px var(--shadow);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chart-actions button {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .chart-actions button:hover {
+            color: var(--primary-dark);
+        }
+
+        .chart-container {
+            flex-grow: 1;
+            position: relative;
+            height: 300px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding-top: 10px;
+            }
+            
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="sua-logo.png" alt="Logo Grupo Atos">
+        </div>
+        
+        <div class="sidebar-title">Programa de Relacionamento</div>
+        
+        <div class="user-info">
+            <div>V</div>
+            <div>Vendedor</div>
+            <div>Vendedor Interno</div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="desempenho.html" class="active"><i class="fas fa-chart-line"></i> Desempenho</a></li>
+            <li><a href="#"><i class="fas fa-history"></i> Histórico</a></li>
+            <li><a href="#"><i class="fas fa-trophy"></i> Metas</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> Configurações</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+        </ul>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <!-- Breadcrumbs -->
+        <div class="breadcrumbs">
+            <a href="index.html">Início</a>
+            <span class="separator">/</span>
+            <span class="current">Desempenho</span>
+        </div>
+
+        <!-- Page header -->
+        <div class="page-header">
+            <h1>Análise de Desempenho</h1>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label for="period">Período:</label>
+                <select id="period">
+                    <option value="last_month">Último Mês</option>
+                    <option value="last_quarter">Último Trimestre</option>
+                    <option value="last_year" selected>Último Ano</option>
+                    <option value="custom">Personalizado</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="region">Região:</label>
+                <select id="region">
+                    <option value="all" selected>Todas</option>
+                    <option value="maranhao">Maranhão</option>
+                    <option value="piaui">Piauí</option>
+                    <option value="rio_grande_norte">Rio Grande do Norte</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="plan_type">Tipo:</label>
+                <select id="plan_type">
+                    <option value="all" selected>Todos</option>
+                    <option value="saude">Saúde</option>
+                    <option value="odonto">Odonto</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <button id="apply-filters">
+                    <i class="fas fa-filter"></i> Aplicar Filtros
+                </button>
+            </div>
+        </div>
+
+        <!-- Chart grid -->
+        <div class="chart-grid">
+            <!-- Gráfico 1 - Categoria -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Vendas por Categoria</div>
+                    <div class="chart-actions">
+                        <button title="Baixar como PNG">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button title="Expandir">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chart-category"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfico 2 - Tipo -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Vendas por Tipo de Plano</div>
+                    <div class="chart-actions">
+                        <button title="Baixar como PNG">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button title="Expandir">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chart-plan-type"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfico 3 - Operadora -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Vendas por Operadora</div>
+                    <div class="chart-actions">
+                        <button title="Baixar como PNG">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button title="Expandir">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chart-operator"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfico 4 - Administradora -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Vendas por Administradora</div>
+                    <div class="chart-actions">
+                        <button title="Baixar como PNG">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button title="Expandir">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chart-administrator"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfico 5 - Adimplência por Operadora -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Adimplência por Operadora</div>
+                    <div class="chart-actions">
+                        <button title="Baixar como PNG">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button title="Expandir">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chart-adimplencia"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfico 6 - Arrecadação últimos 12 meses -->
+            <div class="chart-card full-width">
+                <div class="chart-header">
+                    <div class="chart-title">Arrecadação nos Últimos 12 Meses</div>
+                    <div class="chart-actions">
+                        <button title="Baixar como PNG">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button title="Expandir">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chart-revenue"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Dados de exemplo para todos os gráficos
+        const dadosCategoria = {
+            labels: ['PF', 'PME', 'ADESÃO', 'CORPORET'],
+            datasets: [{
+                label: 'Vendas por Categoria',
+                data: [3250, 2100, 1800, 950],
+                backgroundColor: [
+                    '#36a2eb',
+                    '#ff6384',
+                    '#4bc0c0',
+                    '#ffcd56'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const dadosTipoPlano = {
+            labels: ['Saúde', 'Odonto'],
+            datasets: [{
+                label: 'Vendas por Tipo de Plano',
+                data: [7200, 900],
+                backgroundColor: [
+                    '#36a2eb',
+                    '#ff6384'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const dadosOperadora = {
+            labels: ['AMIL', 'HAPVIDA - MA', 'HAPVIDA - PI', 'HUMANA - MA', 'HUMANA - PI', 'HUMANA - RN', 'INTERMED', 'ODONT SELECT', 'SULAMERICA', 'UNIMED FORTALEZA', 'UNIMED TERESINA'],
+            datasets: [{
+                label: 'Vendas por Operadora',
+                data: [1650, 980, 1100, 750, 820, 450, 510, 330, 290, 580, 640],
+                backgroundColor: '#36a2eb',
+                borderWidth: 1
+            }]
+        };
+
+        const dadosAdministradora = {
+            labels: ['G2C - PI', 'ADESÃO SELECT', 'GEAP SAÚDE', 'G2C - MA', 'ALL CARE', 'UNIPACTO', 'QUALICORP', 'CORPE'],
+            datasets: [{
+                label: 'Vendas por Administradora',
+                data: [1200, 850, 920, 780, 560, 620, 710, 460],
+                backgroundColor: '#4bc0c0',
+                borderWidth: 1
+            }]
+        };
+
+        const dadosAdimplencia = {
+            labels: ['AMIL', 'HAPVIDA - MA', 'HAPVIDA - PI', 'HUMANA - MA', 'HUMANA - PI', 'HUMANA - RN', 'INTERMED', 'ODONT SELECT', 'SULAMERICA', 'UNIMED FORTALEZA', 'UNIMED TERESINA'],
+            datasets: [{
+                label: 'Adimplência (%)',
+                data: [95.2, 92.8, 93.5, 91.7, 90.5, 89.8, 94.3, 96.1, 94.8, 92.3, 93.7],
+                backgroundColor: '#ff6384',
+                borderWidth: 1
+            }]
+        };
+
+        const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        const dadosArrecadacao = {
+            labels: meses,
+            datasets: [{
+                label: 'Arrecadação (R$)',
+                data: [85000, 92000, 88000, 94500, 98000, 103000, 99500, 105000, 112000, 108000, 115000, 122000],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: '#36a2eb',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        };
+
+        // Configurações comuns para vários gráficos
+        const barOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        // Configuração para gráfico de arrecadação
+        const lineOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': R$ ' + context.parsed.y.toLocaleString('pt-BR');
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value.toLocaleString('pt-BR');
+                        }
+                    }
+                }
+            }
+        };
+
+        // Configuração para gráfico de adimplência
+        const adimplenciaOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.x + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        };
+
+        // Inicializar todos os gráficos quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gráfico 1 - Categoria
+            new Chart(
+                document.getElementById('chart-category').getContext('2d'),
+                {
+                    type: 'pie',
+                    data: dadosCategoria,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const value = context.parsed;
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return context.label + ': ' + value + ' (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            );
+
+            // Gráfico 2 - Tipo de Plano
+            new Chart(
+                document.getElementById('chart-plan-type').getContext('2d'),
+                {
+                    type: 'doughnut',
+                    data: dadosTipoPlano,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const value = context.parsed;
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return context.label + ': ' + value + ' (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            );
+
+            // Gráfico 3 - Operadora
+            new Chart(
+                document.getElementById('chart-operator').getContext('2d'),
+                {
+                    type: 'bar',
+                    data: dadosOperadora,
+                    options: barOptions
+                }
+            );
+
+            // Gráfico 4 - Administradora
+            new Chart(
+                document.getElementById('chart-administrator').getContext('2d'),
+                {
+                    type: 'bar',
+                    data: dadosAdministradora,
+                    options: barOptions
+                }
+            );
+
+            // Gráfico 5 - Adimplência por Operadora
+            new Chart(
+                document.getElementById('chart-adimplencia').getContext('2d'),
+                {
+                    type: 'bar',
+                    data: dadosAdimplencia,
+                    options: adimplenciaOptions
+                }
+            );
+
+            // Gráfico 6 - Arrecadação últimos 12 meses
+            new Chart(
+                document.getElementById('chart-revenue').getContext('2d'),
+                {
+                    type: 'line',
+                    data: dadosArrecadacao,
+                    options: lineOptions
+                }
+            );
+
+            // Adicionar funcionalidade aos botões de download
+            document.querySelectorAll('.chart-actions button:first-child').forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    const canvas = document.querySelectorAll('canvas')[index];
+                    const link = document.createElement('a');
+                    link.download = 'grafico-' + (index + 1) + '.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                });
+            });
+
+            // Adicionar funcionalidade ao botão de aplicar filtros
+            document.getElementById('apply-filters').addEventListener('click', function() {
+                alert('Filtros aplicados! Em uma implementação completa, os gráficos seriam atualizados com os novos dados.');
+            });
+        });
+    </script>
+</body>
+</html>
