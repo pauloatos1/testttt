@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações - Programa de Relacionamento</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+      <div class="top-bar-content">
+          <div class="logo-container">
+              <img src="sua-logo.png" alt="Logo Grupo Atos">
+              <h2>Programa de Relacionamento</h2>
+          </div>
+          <div class="user-info">
+              <div class="user-avatar">V</div>
+              <div class="user-details">
+                  <div class="user-name nome-usuario">Vendedor</div>
+                  <div class="user-role tipo-usuario">Vendedor Interno</div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+      <div class="navbar-content">
+          <ul>
+              <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+              <li><a href="desempenho.html"><i class="fas fa-chart-line"></i> Desempenho</a></li>
+              <li><a href="historico.html"><i class="fas fa-calendar-alt"></i> Histórico</a></li>
+              <li><a href="metas.html"><i class="fas fa-trophy"></i> Metas</a></li>
+              <li><a href="configuracoes.html" class="active"><i class="fas fa-cog"></i> Configurações</a></li>
+              <li><a href="login.html" id="btn-logout"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+          </ul>
+      </div>
+  </nav>
+  <!-- Main Container -->
+  <div class="container">
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs">
+          <a href="index.html">Início</a>
+          <span class="separator">/</span>
+          <span class="current">Configurações</span>
+      </div>
+      <!-- Conteúdo da Página -->
+      <div class="page-content">
+          <h1>Configurações do Sistema</h1>
+          <p>Ajuste suas preferências e dados pessoais.</p>
+          <!-- Formulário de Configurações -->
+          <form id="settings-form">
+              <div class="form-group">
+                  <label for="nome">Nome do Usuário</label>
+                  <input type="text" id="nome" name="nome" placeholder="Digite seu nome" value="Vendedor">
+              </div>
+              <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" placeholder="Digite seu email" value="vendedor@grupoatos.com.br">
+              </div>
+              <div class="form-group">
+                  <label for="senha">Nova Senha</label>
+                  <input type="password" id="senha" name="senha" placeholder="Digite a nova senha">
+              </div>
+              <button type="submit" class="btn-calcular">Salvar Configurações</button>
+          </form>
+      </div>
+  </div>
+  <!-- Footer -->
+  <footer>
+      <div class="footer-content">
+          <div class="copyright">
+              &copy; 2025 Grupo Atos - Programa de Relacionamento
+          </div>
+          <div class="footer-links">
+              <a href="#">Termos de Uso</a>
+              <a href="#">Política de Privacidade</a>
+              <a href="#">Suporte</a>
+          </div>
+      </div>
+  </footer>
+  <script src="script.js"></script>
+  <script>
+    // Exemplo simples de manipulação do formulário de configurações
+    document.getElementById('settings-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Configurações salvas com sucesso!');
+    });
+  </script>
+</body>
+</html>
