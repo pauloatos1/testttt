@@ -1,365 +1,216 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desempenho - Programa de Relacionamento</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --primary: #2980b9;
-            --primary-dark: #1c638d;
-            --primary-light: #3498db;
-            --secondary: #0A2A5F;
-            --highlight: #16a085;
-            --alert: #e74c3c;
-            --background: #ecf0f1;
-            --card: #ffffff;
-            --text: #2c3e50;
-            --text-light: #7f8c8d;
-            --success: #27ae60;
-            --text-white: #ffffff;
-            --shadow: rgba(0, 0, 0, 0.1);
-            --border-radius: 8px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--background);
-            color: var(--text);
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background: var(--background);
-            box-shadow: 2px 0 5px var(--shadow);
-            display: flex;
-            flex-direction: column;
-            padding-top: 20px;
-            flex-shrink: 0;
-        }
-
-        .sidebar-logo {
-            text-align: center;
-            padding: 0 20px 20px;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-logo img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .sidebar-title {
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--text);
-        }
-
-        .user-info {
-            padding: 0 20px 20px;
-            font-size: 14px;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar-menu li {
-            margin-bottom: 5px;
-        }
-
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: var(--text);
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .sidebar-menu a:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-
-        .sidebar-menu a.active {
-            background-color: var(--primary);
-            color: var(--text-white);
-            border-left: 4px solid var(--primary-dark);
-        }
-
-        .sidebar-menu i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Main content */
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        /* Breadcrumbs */
-        .breadcrumbs {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .breadcrumbs a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .breadcrumbs a:hover {
-            text-decoration: underline;
-        }
-
-        .breadcrumbs .separator {
-            margin: 0 10px;
-            color: var(--text-light);
-        }
-
-        .breadcrumbs .current {
-            font-weight: 500;
-        }
-
-        /* Title header */
-        .page-header {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--gray-300);
-        }
-
-        .page-header h1 {
-            font-size: 24px;
-            color: var(--primary-dark);
-        }
-
-        /* Filter bar */
-        .filter-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            background-color: var(--card);
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px var(--shadow);
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-        }
-
-        .filter-group label {
-            margin-right: 8px;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .filter-group select,
-        .filter-group input {
-            padding: 6px 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .filter-group button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-
-        .filter-group button:hover {
-            background-color: var(--primary-dark);
-        }
-
-        /* Chart grid */
-        .chart-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .chart-card {
-            background-color: var(--card);
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 4px var(--shadow);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .chart-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-
-        .chart-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chart-actions button {
-            background: transparent;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .chart-actions button:hover {
-            color: var(--primary-dark);
-        }
-
-        .chart-container {
-            flex-grow: 1;
-            position: relative;
-            height: 300px;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                padding-top: 10px;
-            }
-            
-            .chart-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico - Programa de Relacionamento</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #2980b9;
+      --primary-dark: #1c638d;
+      --primary-light: #3498db;
+      --secondary: #0A2A5F;
+      --highlight: #16a085;
+      --alert: #e74c3c;
+      --background: #ecf0f1;
+      --card: #ffffff;
+      --text: #2c3e50;
+      --text-light: #7f8c8d;
+      --success: #27ae60;
+      --text-white: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --border-radius: 8px;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background: var(--background);
+      box-shadow: 2px 0 5px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-logo {
+      text-align: center;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .sidebar-logo img {
+      max-width: 100%;
+      height: auto;
+    }
+    .sidebar-title {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--text);
+    }
+    .user-info {
+      padding: 0 20px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .sidebar-menu a:hover {
+      background-color: rgba(0,0,0,0.05);
+    }
+    .sidebar-menu a.active {
+      background-color: var(--primary);
+      color: var(--text-white);
+      border-left: 4px solid var(--primary-dark);
+    }
+    .sidebar-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .breadcrumbs a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+    .breadcrumbs .separator {
+      margin: 0 10px;
+      color: var(--text-light);
+    }
+    .breadcrumbs .current {
+      font-weight: 500;
+    }
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        padding-top: 10px;
+      }
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: var(--primary);
+      color: var(--text-white);
+    }
+  </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-logo">
-            <img src="sua-logo.png" alt="Logo Grupo Atos">
-        </div>
-        
-        <div class="sidebar-title">Programa de Relacionamento</div>
-        
-        <div class="user-info">
-            <div>V</div>
-            <div>Vendedor</div>
-            <div>Vendedor Interno</div>
-        </div>
-        
-        <ul class="sidebar-menu">
-            <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="desempenho.html" class="active"><i class="fas fa-chart-line"></i> Desempenho</a></li>
-            <li><a href="leads.html"><i class="fas fa-chart-line"></i> Leads</a></li>
-            <li><a href="historico.html"><i class="fas fa-history"></i> Histórico</a></li>
-            <li><a href="metas.html"><i class="fas fa-trophy"></i> Metas</a></li>
-            <li><a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a></li>
-            <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
-        </ul>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="sua-logo.png" alt="Logo Grupo Atos">
     </div>
-  
-  <!-- Main Container -->
-  <div class="container">
-      <!-- Breadcrumbs -->
-      <div class="breadcrumbs">
-          <a href="index.html">Início</a>
-          <span class="separator">/</span>
-          <span class="current">Histórico</span>
-      </div>
-      <!-- Conteúdo da Página -->
-      <div class="page-content">
-          <h1>Histórico de Desempenho</h1>
-          <p>Acompanhe seu desempenho ao longo dos meses.</p>
-          <!-- Exemplo de tabela com histórico -->
-          <table>
-              <thead>
-                  <tr>
-                      <th>Mês</th>
-                      <th>Vendas</th>
-                      <th>Vidas Contratadas</th>
-                      <th>Adimplência (%)</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td>Janeiro</td>
-                      <td>R$ 15.000,00</td>
-                      <td>40</td>
-                      <td>92%</td>
-                  </tr>
-                  <tr>
-                      <td>Fevereiro</td>
-                      <td>R$ 18.000,00</td>
-                      <td>45</td>
-                      <td>94%</td>
-                  </tr>
-                  <tr>
-                      <td>Março</td>
-                      <td>R$ 17.500,00</td>
-                      <td>43</td>
-                      <td>93%</td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
+    <div class="sidebar-title">Programa de Relacionamento</div>
+    <div class="user-info">
+      <div>V</div>
+      <div>Vendedor</div>
+      <div>Vendedor Interno</div>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="desempenho.html"><i class="fas fa-chart-line"></i> Desempenho</a></li>
+      <li><a href="leads.html"><i class="fas fa-chart-line"></i> Leads</a></li>
+      <li><a href="historico.html" class="active"><i class="fas fa-calendar-alt"></i> Histórico</a></li>
+      <li><a href="metas.html"><i class="fas fa-trophy"></i> Metas</a></li>
+      <li><a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a></li>
+      <li><a href="login.html" id="btn-logout"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+    </ul>
   </div>
-  <!-- Footer -->
-  <footer>
-      <div class="footer-content">
-          <div class="copyright">
-              &copy; 2025 Grupo Atos - Programa de Relacionamento
-          </div>
-          <div class="footer-links">
-              <a href="#">Termos de Uso</a>
-              <a href="#">Política de Privacidade</a>
-              <a href="#">Suporte</a>
-          </div>
-      </div>
-  </footer>
-  <script src="script.js"></script>
+  
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="breadcrumbs">
+      <a href="index.html">Início</a>
+      <span class="separator">/</span>
+      <span class="current">Histórico</span>
+    </div>
+    
+    <div class="page-content">
+      <h1>Histórico de Desempenho</h1>
+      <p>Acompanhe seu desempenho nos últimos meses:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Mês</th>
+            <th>Vendas</th>
+            <th>Vidas Contratadas</th>
+            <th>Adimplência (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Janeiro</td>
+            <td>R$ 15.000,00</td>
+            <td>40</td>
+            <td>92%</td>
+          </tr>
+          <tr>
+            <td>Fevereiro</td>
+            <td>R$ 18.000,00</td>
+            <td>45</td>
+            <td>94%</td>
+          </tr>
+          <tr>
+            <td>Março</td>
+            <td>R$ 17.500,00</td>
+            <td>43</td>
+            <td>93%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </body>
 </html>
